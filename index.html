@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aleno features</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</head>
+<style>
+  body{
+    padding: 4rem;
+    padding-top: 2rem;
+    background-color: #ecf0f1;
+  }
+  h1, p, h2, h3, h4 {
+    color: #2c3e50;
+  }
+</style>
+<body>
+  <h1 style="margin-bottom: 2rem;">Aleno POC</h1>
+  <p>This page aims to establish dapps Intelligence. This documentation is divided into 5 different sections:</p>
+  <ul>
+    <li><a href="#behavior">Behavior</a>: understand the habits of your users</li>
+    <li><a href="#traffic" >Traffic</a>: understand your contract usage and who is using it</li>
+    <li><a href="#acquisition-retention" >Acquisition & Retention</a>: Measure KPIs</li>
+    <li><a href="#communities" >Communities</a>: explore your user's community and what they are doing outside of your contract</li>
+    <li><a href="#compare" >Compare</a>: compare contracts together. How do stackers/holders use my other contracts? How do my contracts perform compare to the global market?</li>
+  </ul>
+
+  <p style="font-weight: bold; font-style: italic;">The goal of this document is to serve as a discussion base to help us know which features companies are most interested in and to find new feature ideas. For this reason, most pictures presented here are not based on real-world data.</p>
+
+  <div id="content-container"></div>
+
+  <script>
+    
+    const FEATURE_WIDTH = 300
+    const FEATURE_HEIGHT = 2.5*FEATURE_WIDTH
+    const FEATURE_SPACING = 32
+    const FEATURE_MODAL_WIDTH = "80vw"
+    const FEATURE_MODAL_HEIGHT = "80vh"
+    const IMG_HEIGHT = Math.floor( FEATURE_HEIGHT / 3)
+
+    const CONTENT_CONTAINER = $("#content-container")
+    
+    const CATEGORIES = [
+      {
+        id: "behavior",
+        title: "User behavior features",
+        features: [
+          {
+            id: "user_age",
+            title: "User age",
+            question: "How much volume do recent/old addresses do on my app ?",
+            description: "For each address that interacted with your dapp, we process the address' age on the first interaction with your dapp. We display the distribution (count users) and the weighted distribution. The weight of a user corresponds to volume performed by the user on the contract (For instance, a big user will have a weight of 1, a medium user a weight around 0.5 and a small user a weight 0). This feature enables you to detect and list addresses that use your app and has been created only for this purpose (this kind of address will have an age close to 0).",
+            imgPaths: ["./img/user_age_0.png", "./img/user_age_1.png", "./img/user_age_2.png"], 
+          },
+          {
+            id: "user_labels",
+            title: "User labels",
+            question: "What are the characteristics of my users ?",
+            description: "On each user, we can compute many labels, each label corresponding to a notable characteristic. We can display users in a table and implement filter features to search for specific kinds of users. We can also group all users by labels and compute the number of corresponding users and the related volume done on your dapp.",
+            imgPaths: ["./img/user_labels_0.png", "./img/user_labels_1.png", "./img/user_labels_2.png", "./img/user_labels_3.png"], 
+          },
+          {
+            id: "supply_borrow_duration",
+            title: "Supply / borrow duration",
+            question: "For lending app only: How long do my users supply before withdrawing ?",
+            description: "This feature is designed for lending protocols: For each user, we can compute the average supply duration & average borrow duration. We can then group the results by category/label.",
+            imgPaths: ["./img/supply_borrow_duration_0.png", "./img/supply_borrow_duration_1.png", "./img/supply_borrow_duration_2.png"], 
+          },
+        ]
+      },
+      {
+        id: "traffic",
+        title: "Traffic features",
+        features: [
+          {
+            id: "user_volume_distribution",
+            title: "user volume distribution",
+            question: "How is the app volume distributed over my users ?",
+            description: "We group your users by volume they performed on your dapp. We display the number of addresses, number of transactions, and volume for each category of volume.",
+            imgPaths: ["./img/user_volume_distribution_0.png"], 
+          },
+          {
+            id: "non_organic_volume",
+            title: "Non organic volume",
+            question: "How much non-organic volume do I have on my app ?",
+            description: "Using non-organic labels, we display organic vs non-organic volume over time",
+            imgPaths: ["./img/non_organic_volume_0.png"], 
+          },
+          {
+            id: "volume_by_transaction",
+            title: "Volume by transaction",
+            question: "Which transaction type is doing the most volume over time?",
+            description: "Using the transaction type on your dapp, we can process the volume per method over time. For instance, on a lending protocol such as Morpho, 4 methods exists: Supply / Borrow / Withdraw / repay / claim reward.",
+            imgPaths: ["./img/volume_by_transaction_0.png"], 
+          },
+          {
+            id: "user_timezone",
+            title: "user timezone",
+            question: "What are my users' timezones ?",
+            description: "Using all transaction timestamps of an address, we can estimate its timezone and then plot the distribution.",
+            imgPaths: ["./img/user_timezone_0.png"], 
+          },
+        ]
+      },
+      {
+        id: "acquisition-retention",
+        title: "Acquisition & Retention features",
+        features: [
+          {
+            id: "new_user_acquisition",
+            title: "New user acquisition",
+            question: "When did I acquire my best users ?",
+            description: "We use the volume performed by each user to weigh them. We display over time new users (count new addresses), new weighted users sum, and new big users over time.",
+            imgPaths: ["./img/new_user_acquisition_0.png"], 
+          },
+          {
+            id: "new_user_volume",
+            title: "New user volume",
+            question: "How much volume is performed by recent users vs old users ?",
+            description: "We compute the volume for recent users (less than a week) and old users.",
+            imgPaths: ["./img/new_user_volume_0.png"], 
+          },
+          {
+            id: "volume_by_cohort",
+            title: "Volume by cohort",
+            question: "How much volume is performed by the users' cohorts? What is my retention over time ?",
+            description: "We group users by cohort (based on the timestamp of their first transaction on your dapp). We display the volume performed over time.",
+            imgPaths: ["./img/volume_by_cohort_0.png", "./img/volume_by_cohort_1.png"], 
+          },
+        ]
+      },
+      {
+        id: "communities",
+        title: "Communities features",
+        features: [
+          {
+            id: "user_popular_tokens",
+            title: "user popular tokens",
+            question: "What are my user's most popular tokens ?",
+            description: "By fetching all user's transfers, we can process your user's wallets and the volume they performed on each token (both on your app and outside your app). We then group results by tokens to show your users' most popular tokens.",
+            imgPaths: ["./img/user_popular_tokens_0.png", "./img/user_popular_tokens_1.png"], 
+          },
+          {
+            id: "user_popular_contracts",
+            title: "user popular contracts",
+            question: "What are my user's most popular contracts ?",
+            description: "By fetching all user's transfers, we can process the number of interactions and the volume performed on other Defi apps.",
+            imgPaths: ["./img/user_popular_contracts_0.png"], 
+          },
+          {
+            id: "connected_users",
+            title: "Connected users",
+            question: "Do I have multiple user addresses that belong to the same person/entity ?",
+            description: "With all users transfers, we can detect which addresses are connected (they executed direct transfers). This feature enables to detect addresses that potentially belong to the same person / entity.",
+            imgPaths: ["./img/connected_users_2.png", "./img/connected_users_1.png", "./img/connected_users_0.png"], 
+          },
+          {
+            id: "interaction_map",
+            title: "Interaction map",
+            question: "What is the ecosystem around my app ?",
+            description: "Using all transfers/transactions outside the app of all users, we can display the ecosystem around the app.",
+            imgPaths: ["./img/interaction_map_0.png", "./img/interaction_map_1.png", "./img/interaction_map_2.png"], 
+          },
+        ]
+      },
+      {
+        id: "compare",
+        title: "Compare features",
+        features: [
+          {
+            id: "user_penetration",
+            title: "User penetration",
+            question: "Do I have small users that could become big?",
+            description: "For each user, we process the volume he performed on your dapp and the volume he performed outside your dapp. We draw the heatmap based on these values (the color of the cell corresponds to the sum of volume outside your dapp). You can also compare your dapp against other dapp, For example on Morpho (a lending protocol), we can compare volume on performed by users on morpho and volume performed on other lending protocol",
+            imgPaths: ["./img/user_penetration_0.png", "./img/user_penetration_1.png"], 
+          },
+          {
+            id: "compare_contracts",
+            title: "Compare contracts",
+            question: "What is the difference between my users and other app users ?",
+            description: "All volume-based metrics can be applied to any contract. We can compare two contracts.",
+            imgPaths: ["./img/compare_contracts_0.png"], 
+          },
+          {
+            id: "analyze_shared_users",
+            title: "Analyze shared users",
+            question: "What is the behavior of my users on other apps ?",
+            description: "We find shared users between two given contracts. We can compute metrics on shared users. For instance on Morpho contract and AAVE contract.",
+            imgPaths: ["./img/analyze_shared_users_0.png"], 
+          },
+        ]
+      }
+    ]
+
+    const getCardDescription = (text) => text.length < 30 ? text : `${text.substring(0, 30)}...`
+
+    const displayPicture = (path) => `<img src="${path}" style="width: 70vw; margin-top: 1rem;" />`
+
+    const displayFeature = (container, feature) => {
+      const { id, title, imgPaths, question, description } = feature
+      container.append($(`
+      <div class="card feature-container" style="width: ${FEATURE_WIDTH}px; margin-right: ${FEATURE_SPACING}px; margin-top: ${FEATURE_SPACING}px;" >
+        <img src="${imgPaths[0]}" class="card-img-top" style="width: ${FEATURE_WIDTH-2}px; height: ${IMG_HEIGHT}px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title">${title}</h5>
+          <p class="card-text">${getCardDescription(description)}</p>
+          <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#${id}">details</a>
+        </div>
+      </div>
+
+      <div class="modal fade" id="${id}" tabindex="-1" aria-labelledby="${id}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="max-width: 80vw; width: 80vw; height: 80vh; max-height: 80vh;" >
+          <div class="modal-content">
+            <div class="modal-header">
+              <h1 class="modal-title fs-5" id="${id}">${title}</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="height: 80vh;" >
+              <h3>${question}</h3>
+              <p>${description}</p>
+              <h4 style="margin-top: 4rem;" >Pictures</h4>
+              ${imgPaths.map(displayPicture)}
+            </div>
+          </div>
+        </div>
+      </div>
+      `)); 
+    }
+
+    const displayCategory = (category) => {
+      const { id, title, features } = category
+      CONTENT_CONTAINER.append($(`<h2 id="${id}" style="margin-top: 5rem; margin-bottom: -1rem;" >${title}<h2/>`))
+      const categoryFeatureContainer = $(`<div style="display: flex; flex-wrap: wrap;"><div/>`)
+      features.forEach((feature) => displayFeature(categoryFeatureContainer, feature))
+      CONTENT_CONTAINER.append(categoryFeatureContainer)
+    }
+
+    CATEGORIES.forEach(displayCategory)
+
+  </script>
+
+</body>
+</html>
